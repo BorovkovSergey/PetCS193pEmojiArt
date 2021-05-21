@@ -10,6 +10,7 @@ import Foundation
 struct EmojiArt {
     var emojis = [Emoji]()
     var uniqueEmojiID = 0
+    var backgroundURL: URL?
     
     struct Emoji: Identifiable {
         let content: String

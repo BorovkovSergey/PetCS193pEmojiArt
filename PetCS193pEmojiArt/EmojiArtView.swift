@@ -22,22 +22,22 @@ struct EmojiArtView: View {
         }
         .padding(.horizontal)
         GeometryReader{ geometry in
-            ZStack{
-                Color.yellow.overlay(
-                    Group{
-                            
-                    })
-                    .edgesIgnoringSafeArea([.horizontal, .bottom])
-                    .onDrop(of: ["public.text"], isTargeted: nil){ providers, location in
-                        var location = geometry.convert(location, from: .global)
-                        location = CGPoint(x: location.x - geometry.size.width/2, y: location.y - geometry.size.height/2)
-                        return self.Drop(providers: providers, at: location)
+            Color.yellow.overlay(
+                Group{
+                    if self.emojiArt.backgroundImage != nil {
+                        Image(uiImage: self.emojiArt.backgroundImage!)
                     }
-                ForEach(self.emojiArt.emojis){ emoji in
-                    Text(emoji.content)
-                        .font(self.Font(for: emoji))
-                        .position(self.Position( for: emoji, in: geometry.size))
+                })
+                .edgesIgnoringSafeArea([.horizontal, .bottom])
+                .onDrop(of: ["public.image", "public.text"], isTargeted: nil){ providers, location in
+                    var location = geometry.convert(location, from: .global)
+                    location = CGPoint(x: location.x - geometry.size.width/2, y: location.y - geometry.size.height/2)
+                    return self.Drop(providers: providers, at: location)
                 }
+            ForEach(self.emojiArt.emojis){ emoji in
+                Text(emoji.content)
+                    .font(self.Font(for: emoji))
+                    .position(self.Position( for: emoji, in: geometry.size))
             }
         }
     }

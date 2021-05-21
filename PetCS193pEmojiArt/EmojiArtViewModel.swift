@@ -11,7 +11,7 @@ class EmojiArtVM: ObservableObject {
     static let emojis: String = "🐶 🐱 🐭 🐹 🐰 🐻 🧸 🐼 🐨 🐯 🦁 🐮 🐷 🐽 🐸 🐵 🙈 🙉 🙊 🐒 🦍 🦧 🐔 🐧 🐦 🐤 🐣 🐥 🐺 🦊 🦝 🐗 🐴 🦓 🦒 "
     
     @Published private var emojiArt = EmojiArt()
-    
+    @Published var backgroundImage: UIImage?
     var emojis: [EmojiArt.Emoji] { emojiArt.emojis }
     
     func AddEmoji(_ emoji: String, at location: CGPoint, with size: CGFloat){
@@ -23,7 +23,23 @@ class EmojiArtVM: ObservableObject {
     }
     
     func SetBackgroundURL(_ url: URL){
-        
+        emojiArt.backgroundURL = url.imageURL
+        FetchBackgroundImageData()
+    }
+    
+    private func FetchBackgroundImageData(){
+        backgroundImage = nil
+        if let url = self.emojiArt.backgroundURL {
+            DispatchQueue.global(qos: .userInitiated).async {
+                if let imageData = try? Data(contentsOf: url) {
+                    DispatchQueue.main.async {
+                        if url == self.emojiArt.backgroundURL {
+                            self.backgroundImage = UIImage(data: imageData)
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 

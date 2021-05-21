@@ -60,8 +60,8 @@
 			children = (
 				DE1C61372656331D002142A6 /* EmojiArtView.swift */,
 				DE1C614726563409002142A6 /* EmojiArtViewModel.swift */,
-				DE1C614D26566810002142A6 /* Extensions.swift */,
 				DE1C614A265635A2002142A6 /* EmojiArt.swift */,
+				DE1C614D26566810002142A6 /* Extensions.swift */,
 				DE1C61392656331F002142A6 /* Assets.xcassets */,
 				DE1C613E2656331F002142A6 /* Info.plist */,
 				DE1C61352656331D002142A6 /* PetCS193pEmojiArtApp.swift */,
