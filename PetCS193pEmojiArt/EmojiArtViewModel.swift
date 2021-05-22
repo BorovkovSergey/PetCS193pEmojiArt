@@ -10,7 +10,20 @@ import SwiftUI
 class EmojiArtVM: ObservableObject {
     static let emojis: String = "🐶 🐱 🐭 🐹 🐰 🐻 🧸 🐼 🐨 🐯 🦁 🐮 🐷 🐽 🐸 🐵 🙈 🙉 🙊 🐒 🦍 🦧 🐔 🐧 🐦 🐤 🐣 🐥 🐺 🦊 🦝 🐗 🐴 🦓 🦒 "
     
-    @Published private var emojiArt = EmojiArt()
+    private var emojiArt = EmojiArt() {
+        willSet{
+            objectWillChange.send()
+        }
+        didSet{
+            UserDefaults.standard.set(emojiArt.json, forKey: EmojiArtVM.untitled)
+        }
+    }
+    private static let untitled = "EmojiArtVM.untitled"
+    
+    init() {
+        emojiArt = EmojiArt(json: UserDefaults.standard.data(forKey: EmojiArtVM.untitled)) ?? EmojiArt()
+        FetchBackgroundImageData()
+    }
     @Published var backgroundImage: UIImage?
     var emojis: [EmojiArt.Emoji] { emojiArt.emojis }
     
