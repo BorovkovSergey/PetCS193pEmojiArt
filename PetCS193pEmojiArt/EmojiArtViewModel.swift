@@ -32,9 +32,17 @@ class EmojiArtVM: ObservableObject {
     }
     
     func MoveEmoji(_ emoji: EmojiArt.Emoji, by offset: CGSize) {
-        
+        if let selectedIndex = emojiArt.emojis.FirstIndex(matching: emoji) {
+            emojiArt.emojis[selectedIndex].x = Int(offset.width)
+            emojiArt.emojis[selectedIndex].y = Int(offset.height)
+        }
     }
     
+    func ScaleEmoji(_ emoji: EmojiArt.Emoji, by scale: CGFloat) {
+        if let selectedIndex = emojiArt.emojis.FirstIndex(matching: emoji) {
+            emojiArt.emojis[selectedIndex].size = Int((CGFloat(emojiArt.emojis[selectedIndex].size) * scale).rounded(.toNearestOrEven))
+        }
+    }
     func SetBackgroundURL(_ url: URL){
         emojiArt.backgroundURL = url.imageURL
         FetchBackgroundImageData()
