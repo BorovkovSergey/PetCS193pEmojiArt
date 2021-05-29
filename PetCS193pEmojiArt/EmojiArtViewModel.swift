@@ -31,11 +31,9 @@ class EmojiArtVM: ObservableObject {
         emojiArt.AddEmoji(emoji, x: Int(location.x), y: Int(location.y), size: Int(size))
     }
     
-    func MoveEmoji(_ emoji: EmojiArt.Emoji, by offset: CGSize) {
-        if let selectedIndex = emojiArt.emojis.FirstIndex(matching: emoji) {
-            emojiArt.emojis[selectedIndex].x = Int(offset.width)
-            emojiArt.emojis[selectedIndex].y = Int(offset.height)
-        }
+    func MoveEmoji(by id: Int, by newPos: CGSize) {
+        emojiArt.emojis[id].x = Int(newPos.width)
+        emojiArt.emojis[id].y = Int(newPos.height)
     }
     
     func ScaleEmoji(_ emoji: EmojiArt.Emoji, by scale: CGFloat) {
