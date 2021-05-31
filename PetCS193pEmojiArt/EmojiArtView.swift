@@ -26,6 +26,9 @@ struct EmojiArtView: View {
         ( steadyStatePanOffset + gesturePanOffset ) *  zoomScale
     }
 
+    private var isLoading: Bool {
+        emojiArt.backGroundUrl != nil && emojiArt.backgroundImage == nil
+    }
     var body: some View {
         ScrollView(.horizontal){
             HStack{
@@ -47,12 +50,16 @@ struct EmojiArtView: View {
                         .gesture(self.PanGesture())
                         .gesture(self.ZoomGesture())
                     )
-                ForEach(self.emojiArt.emojis){ emoji in
-                    Text(emoji.content)
-                        .font(animatbleWtihSize: emoji.fontSize * zoomScale)
-                        .position(self.Position( for: emoji, in: geometry.size))
-                        .gesture(self.PanGesture(for: emoji))
-                        .gesture(self.ZoomGesture(for: emoji))
+                if self.isLoading{
+                    Image(systemName: "hourglass").imageScale(.large).spinning()
+                } else {
+                    ForEach(self.emojiArt.emojis){ emoji in
+                        Text(emoji.content)
+                            .font(animatbleWtihSize: emoji.fontSize * zoomScale)
+                            .position(self.Position( for: emoji, in: geometry.size))
+                            .gesture(self.PanGesture(for: emoji))
+                            .gesture(self.ZoomGesture(for: emoji))
+                    }
                 }
             }
             .clipped()
@@ -145,7 +152,7 @@ struct EmojiArtView: View {
             withAnimation{
                 steadyStateZoomScale = 1.0
             }
-            self.emojiArt.SetBackgroundURL(url)
+            self.emojiArt.backGroundUrl = url
         }
         if !found {
             found = providers.loadFirstObject(ofType: String.self) { string in
