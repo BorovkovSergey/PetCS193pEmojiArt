@@ -17,7 +17,7 @@ struct EmojiArtView: View {
     @State private var steadyStatePanOffset: CGSize = .zero
     @GestureState private var gesturePanOffset: CGSize = .zero
     @GestureState private var gesturePanOffsetEmoji: CGSize = .zero
-    
+    @State private var chosenPalette: String = ""
     private var zoomScale: CGFloat{
         steadyStateZoomScale * gestureZoomScale
     }
@@ -32,12 +32,14 @@ struct EmojiArtView: View {
     var body: some View {
         ScrollView(.horizontal){
             HStack{
-                ForEach(EmojiArtVM.emojis.map{ String($0) }, id: \.self) { emoji in
+                PaletteChooser(document: emojiArt, chosenPalette: self.$chosenPalette)
+                ForEach(self.chosenPalette.map{ String($0) }, id: \.self) { emoji in
                     Text(emoji)
                         .font(SwiftUI.Font.system(size: self.defaultEmojiSize))
                         .onDrag { return NSItemProvider(object: emoji as NSString) }
                 }
             }
+            .onAppear{ self.chosenPalette = self.emojiArt.defaultPalette }
         }
         .padding(.horizontal)
         GeometryReader{ geometry in
