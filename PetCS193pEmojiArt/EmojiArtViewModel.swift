@@ -6,18 +6,12 @@
 //
 
 import SwiftUI
+import Combine
 
 class EmojiArtVM: ObservableObject {
     static let emojis: String = "🐶 🐱 🐭 🐹 🐰 🐻 🧸 🐼 🐨 🐯 🦁 🐮 🐷 🐽 🐸 🐵 🙈 🙉 🙊 🐒 🦍 🦧 🐔 🐧 🐦 🐤 🐣 🐥 🐺 🦊 🦝 🐗 🐴 🦓 🦒 "
     
-    private var emojiArt = EmojiArt() {
-        willSet{
-            objectWillChange.send()
-        }
-        didSet{
-            UserDefaults.standard.set(emojiArt.json, forKey: EmojiArtVM.untitled)
-        }
-    }
+    @Published var emojiArt = EmojiArt()
     
     private static let untitled = "EmojiArtVM.untitled"
     
@@ -30,8 +24,13 @@ class EmojiArtVM: ObservableObject {
             FetchBackgroundImageData()
         }
     }
+    
+    private var autosaveCancellable: AnyCancellable?
     init() {
         emojiArt = EmojiArt(json: UserDefaults.standard.data(forKey: EmojiArtVM.untitled)) ?? EmojiArt()
+        autosaveCancellable = $emojiArt.sink{ emojiArt in
+                UserDefaults.standard.set(emojiArt.json, forKey: EmojiArtVM.untitled)
+        }
         FetchBackgroundImageData()
     }
 
