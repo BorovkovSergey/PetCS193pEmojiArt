@@ -36,10 +36,8 @@ class EmojiArtVM: ObservableObject {
         emojiArt.emojis[id].y = Int(newPos.height)
     }
     
-    func ScaleEmoji(_ emoji: EmojiArt.Emoji, by scale: CGFloat) {
-        if let selectedIndex = emojiArt.emojis.FirstIndex(matching: emoji) {
-            emojiArt.emojis[selectedIndex].size = Int((CGFloat(emojiArt.emojis[selectedIndex].size) * scale).rounded(.toNearestOrEven))
-        }
+    func ScaleEmoji(by id: Int, by newSize: CGFloat) {
+            emojiArt.emojis[id].size = Int((newSize).rounded(.toNearestOrEven))
     }
     func SetBackgroundURL(_ url: URL){
         emojiArt.backgroundURL = url.imageURL

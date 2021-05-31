@@ -13,6 +13,7 @@ struct EmojiArtView: View {
     @ObservedObject var emojiArt = EmojiArtVM()
     @State private var steadyStateZoomScale: CGFloat = 1.0
     @GestureState private var gestureZoomScale: CGFloat = 1.0
+    @GestureState private var gestureZoomScaleEmoji: CGFloat = 1.0
     @State private var steadyStatePanOffset: CGSize = .zero
     @GestureState private var gesturePanOffset: CGSize = .zero
     @GestureState private var gesturePanOffsetEmoji: CGSize = .zero
@@ -51,6 +52,7 @@ struct EmojiArtView: View {
                         .font(animatbleWtihSize: emoji.fontSize * zoomScale)
                         .position(self.Position( for: emoji, in: geometry.size))
                         .gesture(self.PanGesture(for: emoji))
+                        .gesture(self.ZoomGesture(for: emoji))
                 }
             }
             .clipped()
@@ -107,6 +109,18 @@ struct EmojiArtView: View {
                                     height: EmojiArtView.startLocation!.y + latestDragGestureValue.translation.height / zoomScale))
             }
             .onEnded{ _ in EmojiArtView.startLocation = nil }
+    }
+    
+    static var startZoomScale: Int? = nil
+    private func ZoomGesture(for emoji: EmojiArt.Emoji) -> some Gesture {
+        let id = emojiArt.emojis.FirstIndex(matching: emoji)!
+        return MagnificationGesture()
+            .updating($gestureZoomScaleEmoji) { latestGestureScale, gestureZoomScale, transaction in
+                if EmojiArtView.startZoomScale == nil {
+                    EmojiArtView.startZoomScale = emojiArt.emojis[id].size
+                }
+                emojiArt.ScaleEmoji(by: id, by: latestGestureScale * self.defaultEmojiSize)
+            }
     }
 
     private func DoubleTapZoom(in size: CGSize) -> some Gesture {
