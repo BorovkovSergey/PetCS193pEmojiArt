@@ -19,6 +19,7 @@
 		DE1C61672664EC0A002142A6 /* Spinning.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE1C61662664EC0A002142A6 /* Spinning.swift */; };
 		DE1C616A2665184F002142A6 /* PaleteChooser.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE1C61692665184F002142A6 /* PaleteChooser.swift */; };
 		DE1C616D26651918002142A6 /* EmojiArtViewModel+Pallete.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE1C616C26651918002142A6 /* EmojiArtViewModel+Pallete.swift */; };
+		DE1C617126661496002142A6 /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE1C617026661496002142A6 /* Grid.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		DE1C61662664EC0A002142A6 /* Spinning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spinning.swift; sourceTree = "<group>"; };
 		DE1C61692665184F002142A6 /* PaleteChooser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaleteChooser.swift; sourceTree = "<group>"; };
 		DE1C616C26651918002142A6 /* EmojiArtViewModel+Pallete.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EmojiArtViewModel+Pallete.swift"; sourceTree = "<group>"; };
+		DE1C617026661496002142A6 /* Grid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +74,7 @@
 				DE1C61662664EC0A002142A6 /* Spinning.swift */,
 				DE1C614726563409002142A6 /* EmojiArtViewModel.swift */,
 				DE1C61692665184F002142A6 /* PaleteChooser.swift */,
+				DE1C617026661496002142A6 /* Grid.swift */,
 				DE1C616C26651918002142A6 /* EmojiArtViewModel+Pallete.swift */,
 				DE1C616226591D98002142A6 /* AnimatableFont.swift */,
 				DE1C614A265635A2002142A6 /* EmojiArt.swift */,
@@ -166,6 +169,7 @@
 				DE1C616326591D98002142A6 /* AnimatableFont.swift in Sources */,
 				DE1C614B265635A2002142A6 /* EmojiArt.swift in Sources */,
 				DE1C616D26651918002142A6 /* EmojiArtViewModel+Pallete.swift in Sources */,
+				DE1C617126661496002142A6 /* Grid.swift in Sources */,
 				DE1C616A2665184F002142A6 /* PaleteChooser.swift in Sources */,
 				DE1C61382656331D002142A6 /* EmojiArtView.swift in Sources */,
 				DE1C615E26591B91002142A6 /* OptionalImage.swift in Sources */,

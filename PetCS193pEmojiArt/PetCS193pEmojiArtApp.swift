@@ -11,7 +11,7 @@ import SwiftUI
 struct PetCS193pEmojiArtApp: App {
     var body: some Scene {
         WindowGroup {
-            EmojiArtView()
+            EmojiArtView(document: EmojiArtVM())
         }
     }
 }

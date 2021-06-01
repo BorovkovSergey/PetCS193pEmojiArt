@@ -46,8 +46,13 @@ extension EmojiArtVM {
     }
     
     @discardableResult
-    func AddEmoji(_ emojisToRemove: String, toPalette Palette: String) -> String {
-        ChangePalette(Palette, to: Palette.filter{ !emojisToRemove.contains($0) })
+    func AddEmoji(_ emoji: String, toPalette palette: String) -> String {
+        ChangePalette(palette, to: (emoji + palette).uniqued())
+    }
+    
+    @discardableResult
+    func RemoveEmoji(_ emojisToRemove: String, fromPalette palette: String) -> String {
+        ChangePalette(palette, to: palette.filter { !emojisToRemove.contains($0) })
     }
     
     private func ChangePalette( _ Palette: String, to newPalette: String) -> String {

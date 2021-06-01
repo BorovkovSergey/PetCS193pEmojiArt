@@ -29,6 +29,12 @@ struct EmojiArtView: View {
     private var isLoading: Bool {
         emojiArt.backGroundUrl != nil && emojiArt.backgroundImage == nil
     }
+    
+    init(document: EmojiArtVM)
+    {
+        self.emojiArt = document
+        _chosenPalette = State(wrappedValue: self.emojiArt.defaultPalette)
+    }
     var body: some View {
         ScrollView(.horizontal){
             HStack{
@@ -39,7 +45,6 @@ struct EmojiArtView: View {
                         .onDrag { return NSItemProvider(object: emoji as NSString) }
                 }
             }
-            .onAppear{ self.chosenPalette = self.emojiArt.defaultPalette }
         }
         .padding(.horizontal)
         GeometryReader{ geometry in
