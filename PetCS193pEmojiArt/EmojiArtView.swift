@@ -11,19 +11,17 @@ import SwiftUI
 struct EmojiArtView: View {
     
     @ObservedObject var emojiArt = EmojiArtVM()
-    @State private var steadyStateZoomScale: CGFloat = 1.0
     @GestureState private var gestureZoomScale: CGFloat = 1.0
     @GestureState private var gestureZoomScaleEmoji: CGFloat = 1.0
-    @State private var steadyStatePanOffset: CGSize = .zero
     @GestureState private var gesturePanOffset: CGSize = .zero
     @GestureState private var gesturePanOffsetEmoji: CGSize = .zero
     @State private var chosenPalette: String = ""
     private var zoomScale: CGFloat{
-        steadyStateZoomScale * gestureZoomScale
+        emojiArt.steadyStateZoomScale * gestureZoomScale
     }
 
     private var panOffset: CGSize{
-        ( steadyStatePanOffset + gesturePanOffset ) *  zoomScale
+        ( emojiArt.steadyStatePanOffset + gesturePanOffset ) *  zoomScale
     }
 
     private var isLoading: Bool {
@@ -79,15 +77,44 @@ struct EmojiArtView: View {
                 location = CGPoint(x: location.x / self.zoomScale, y: location.y / self.zoomScale)
                 return self.Drop(providers: providers, at: location)
                 }
+            .navigationBarItems(trailing: Button(action: {
+                if let url = UIPasteboard.general.url, url != self.emojiArt.backGroundUrl {
+                    confirmBackgroundPaste = true
+                } else {
+                    self.explainBackgroundPaste = true
+                }
+            }, label: {
+                Image(systemName: "doc.on.clipboard").imageScale(.large )
+                    .alert(isPresented: self.$explainBackgroundPaste){
+                        return Alert(
+                            title: Text("Paste Background"),
+                            message: Text("Failed"),
+                            dismissButton: .default(Text("OK")))
+                    }
+                
+            } ))
         }
+        .alert(isPresented: self.$confirmBackgroundPaste)
+        {
+            return Alert(title: Text("Paste Background"),
+                         message: Text("Insert image from: \(UIPasteboard.general.url?.absoluteString ?? "nothing") ?"),
+                         primaryButton: .default(Text("OK")) {
+                            self.emojiArt.backGroundUrl = UIPasteboard.general.url
+                         },
+                         secondaryButton: .cancel())
+        }
+        .zIndex(-1)
     }
 
+    @State private var explainBackgroundPaste = false
+    @State private var confirmBackgroundPaste = false
+    
     private func ZoomToFit(_ image: UIImage?, in size: CGSize){
-        if let image = image, image.size.width > 0, image.size.height > 0 {
+        if let image = image, image.size.width > 0, image.size.height > 0, size.width > 0, size.height > 0 {
             let hZoom = size.height / image.size.height
             let vZoom = size.width / image.size.width
-            self.steadyStatePanOffset = .zero
-            self.steadyStateZoomScale = min(hZoom, vZoom)
+            self.emojiArt.steadyStatePanOffset = .zero
+            self.emojiArt.steadyStateZoomScale = min(hZoom, vZoom)
         }
     }
 
@@ -97,7 +124,7 @@ struct EmojiArtView: View {
                 gestureZoomScale = latestGestureScale
             }
             .onEnded{ finalGestureScale in
-                self.steadyStateZoomScale *= finalGestureScale
+                self.emojiArt.steadyStateZoomScale *= finalGestureScale
             }
     }
 
@@ -107,7 +134,7 @@ struct EmojiArtView: View {
                 gesturePanOffset = latestDragGestureValue.translation / self.zoomScale
             }
             .onEnded{ finalGestureValue in
-                self.steadyStatePanOffset = self.steadyStatePanOffset + finalGestureValue.translation / self.zoomScale
+                self.emojiArt.steadyStatePanOffset = self.emojiArt.steadyStatePanOffset + finalGestureValue.translation / self.zoomScale
             }
     }
     
@@ -158,7 +185,7 @@ struct EmojiArtView: View {
     func Drop(providers: [NSItemProvider], at location: CGPoint) -> Bool {
         var found = providers.loadFirstObject(ofType: URL.self) { url in
             withAnimation{
-                steadyStateZoomScale = 1.0
+                emojiArt.steadyStateZoomScale = 1.0
             }
             self.emojiArt.backGroundUrl = url
         }
