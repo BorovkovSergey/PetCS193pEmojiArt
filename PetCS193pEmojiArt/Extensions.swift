@@ -1,30 +1,48 @@
 //
-//  Extensions.swift
-//  PetCS193pEmojiArt
+//  EmojiArtExtensions.swift
+//  EmojiArt
 //
-//  Created by Sergey Borovkov on 20.05.2021.
+//  Created by CS193p Instructor on 4/27/20.
+//  Copyright © 2020 Stanford University. All rights reserved.
 //
 
 import SwiftUI
 
 extension Collection where Element: Identifiable {
     func FirstIndex(matching element: Element) -> Self.Index? {
-        firstIndex(where: { $0.id == element.id } )
+        firstIndex(where: { $0.id == element.id })
     }
-    
+    // note that contains(matching:) is different than contains()
+    // this version uses the Identifiable-ness of its elements
+    // to see whether a member of the Collection has the same identity
     func contains(matching element: Element) -> Bool {
         self.contains(where: { $0.id == element.id })
     }
 }
 
+extension Data {
+    // just a simple converter from a Data to a String
+    var utf8: String? { String(data: self, encoding: .utf8 ) }
+}
+
 extension URL {
     var imageURL: URL {
+        // check to see if there is an embedded imgurl reference
         for query in query?.components(separatedBy: "&") ?? [] {
-            let querryComponents = query.components(separatedBy: "=")
-            if querryComponents.count == 2 {
-                if querryComponents[0] == "imgurl", let url = URL(string: querryComponents[1].removingPercentEncoding ?? ""){
+            let queryComponents = query.components(separatedBy: "=")
+            if queryComponents.count == 2 {
+                if queryComponents[0] == "imgurl", let url = URL(string: queryComponents[1].removingPercentEncoding ?? "") {
                     return url
                 }
+            }
+        }
+        // this snippet supports the demo in Lecture 14
+        // see storeInFilesystem below
+        if isFileURL {
+            var url = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
+            url = url?.appendingPathComponent(self.lastPathComponent)
+            if url != nil {
+                return url!
             }
         }
         return self.baseURL ?? self
@@ -32,6 +50,7 @@ extension URL {
 }
 
 extension GeometryProxy {
+    // converts from some other coordinate space to the proxy's own
     func convert(_ point: CGPoint, from coordinateSpace: CoordinateSpace) -> CGPoint {
         let frame = self.frame(in: coordinateSpace)
         return CGPoint(x: point.x-frame.origin.x, y: point.y-frame.origin.y)

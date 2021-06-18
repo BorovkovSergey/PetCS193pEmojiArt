@@ -80,7 +80,7 @@ class EmojiArtVM: ObservableObject, Hashable, Identifiable  {
     private var fetchImageCancellable: AnyCancellable?
     private func FetchBackgroundImageData(){
         backgroundImage = nil
-        if let url = self.emojiArt.backgroundURL {
+        if let url = self.emojiArt.backgroundURL?.imageURL {
             fetchImageCancellable?.cancel()
             fetchImageCancellable = URLSession.shared.dataTaskPublisher(for: url)
                 .map{ data, urlResponse in UIImage(data: data) }
